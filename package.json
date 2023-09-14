@@ -1,0 +1,22 @@
+{
+  "name": "chapipets",
+  "version": "1.0.0",
+  "description": "Backend project for chapipets app. A place to share pets in adoption.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rodruxdev/chapipets.git"
+  },
+  "author": "Rodrigo Goitia <rodrigojgq@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rodruxdev/chapipets/issues"
+  },
+  "homepage": "https://github.com/rodruxdev/chapipets#readme",
+  "dependencies": {
+    "express": "4.18.2"
+  }
+}
