@@ -1,0 +1,15 @@
+### Get all pets
+GET http://localhost:3005/pets
+
+###  Get one pet
+GET http://localhost:3005/pets/1
+
+###  Post one pet
+POST http://localhost:3005/pets
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "negresco",
+  "type": 2
+}
