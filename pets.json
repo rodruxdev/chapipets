@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "Fluffy",
+    "size": "small",
+    "breed": "Persian",
+    "age": 3,
+    "description": "Fluffy is a playful and affectionate Persian cat.",
+    "animal": "cat"
+  },
+  {
+    "id": 2,
+    "name": "Max",
+    "size": "medium",
+    "breed": "Golden Retriever",
+    "age": 2,
+    "description": "Max is a friendly and energetic Golden Retriever.",
+    "animal": "dog"
+  },
+  {
+    "id": 3,
+    "name": "Whiskers",
+    "size": "small",
+    "breed": "Siamese",
+    "age": 1,
+    "description": "Whiskers is an elegant Siamese cat with a sweet demeanor.",
+    "animal": "cat"
+  },
+  {
+    "id": 4,
+    "name": "Buddy",
+    "size": "large",
+    "breed": "German Shepherd",
+    "age": 4,
+    "description": "Buddy is a loyal and intelligent German Shepherd.",
+    "animal": "dog"
+  },
+  {
+    "id": 5,
+    "name": "Mittens",
+    "size": "small",
+    "breed": "Tabby",
+    "age": 2,
+    "description": "Mittens is a cuddly Tabby cat who loves attention.",
+    "animal": "cat"
+  },
+  {
+    "id": 6,
+    "name": "Rocky",
+    "size": "medium",
+    "breed": "Labrador Retriever",
+    "age": 3,
+    "description": "Rocky is a playful and loyal Labrador Retriever.",
+    "animal": "dog"
+  },
+  {
+    "id": 7,
+    "name": "Smokey",
+    "size": "large",
+    "breed": "Maine Coon",
+    "age": 5,
+    "description": "Smokey is a majestic Maine Coon cat with a calm demeanor.",
+    "animal": "cat"
+  },
+  {
+    "id": 8,
+    "name": "Luna",
+    "size": "medium",
+    "breed": "Bengal",
+    "age": 2,
+    "description": "Luna is an adventurous and curious Bengal cat.",
+    "animal": "cat"
+  },
+  {
+    "id": 9,
+    "name": "Charlie",
+    "size": "large",
+    "breed": "Rottweiler",
+    "age": 3,
+    "description": "Charlie is a gentle and protective Rottweiler.",
+    "animal": "dog"
+  },
+  {
+    "id": 10,
+    "name": "Simba",
+    "size": "medium",
+    "breed": "Persian",
+    "age": 4,
+    "description": "Simba is a majestic Persian cat with a regal presence.",
+    "animal": "cat"
+  }
+]

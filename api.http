@@ -1,6 +1,9 @@
 ### Get all pets
 GET http://localhost:3005/pets
 
+### Get all dogs
+GET http://localhost:3005/pets?animal=dog
+
 ###  Get one pet
 GET http://localhost:3005/pets/1
 
@@ -9,7 +12,22 @@ POST http://localhost:3005/pets
 Content-Type: application/json
 
 {
-  "id": 1,
-  "name": "negresco",
-  "type": 2
+  "name": "Bella",
+  "size": "small",
+  "breed": "Dachshund",
+  "age": 1,
+  "description": "Bella is an adorable and affectionate Dachshund.",
+  "animal": "dog"
 }
+
+###  Edit one pet
+PATCH http://localhost:3005/pets/1
+Content-Type: application/json
+
+{
+  "size": "medium",
+  "age": 4
+}
+
+###  Delete one pet
+DELETE http://localhost:3005/pets/3
