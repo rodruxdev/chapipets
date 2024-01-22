@@ -2,7 +2,7 @@
 GET http://localhost:3005/pets
 
 ### Get all dogs
-GET http://localhost:3005/pets?animal=dog
+GET http://localhost:3005/pets?animal=dog&size=medium&breed=Golden Retriever
 
 ###  Get one pet
 GET http://localhost:3005/pets/1

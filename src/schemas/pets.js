@@ -1,4 +1,4 @@
-const z = require("zod");
+import z from "zod";
 
 const petSchema = z.object({
   name: z
@@ -25,15 +25,10 @@ const petSchema = z.object({
   }),
 });
 
-function validatePet(input) {
+export function validatePet(input) {
   return petSchema.safeParse(input);
 }
 
-function validatePartialPet(input) {
+export function validatePartialPet(input) {
   return petSchema.partial().safeParse(input);
 }
-
-module.exports = {
-  validatePet,
-  validatePartialPet,
-};

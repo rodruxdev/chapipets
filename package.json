@@ -2,7 +2,8 @@
   "name": "chapipets",
   "version": "1.0.0",
   "description": "Backend project for chapipets app. A place to share pets in adoption.",
-  "main": "index.js",
+  "main": "app.js",
+  "type": "module",
   "scripts": {
     "dev": "node --watch ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
