@@ -7,5 +7,6 @@ petsRouter.get("/", PetsController.getAll);
 petsRouter.post("/", PetsController.create);
 
 petsRouter.get("/:id", PetsController.getById);
+petsRouter.get("/:userId", PetsController.getByUserId);
 petsRouter.patch("/:id", PetsController.update);
 petsRouter.delete("/:id", PetsController.delete);
