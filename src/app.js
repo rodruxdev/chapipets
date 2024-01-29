@@ -14,6 +14,7 @@ app.get("/", (req, res) => {
   res.send("<h1>Hola chapipets</h1>");
 });
 
+app.use("/users", petsRouter);
 app.use("/pets", petsRouter);
 
 app.use((req, res) => {
