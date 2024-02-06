@@ -1,3 +1,5 @@
+import { pool } from "../../services/mysqlPool.js";
+
 export class UsersModel {
   static async getAll(filters) {
     let query =

@@ -1,4 +1,4 @@
-const pool = "connection";
+import { pool } from "../../services/mysqlPool.js";
 
 export class PetsModel {
   static async getAll(filters) {
