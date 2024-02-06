@@ -1,16 +1,29 @@
-import { PetsModel } from "../models/pet.js";
+import { PetsModel } from "../models/mysql/pet.js";
 import { validatePartialPet, validatePet } from "../schemas/pets.js";
 
 export class PetsController {
   static async getAll(req, res) {
-    const { animal, size, breed } = req.query;
-    const filteredPets = await PetsModel.getAll({ animal, size, breed });
+    const result = validatePartialPet(req.body);
+    if (result.error) {
+      return res.status(400).json({ error: JSON.parse(result.error.message) });
+    }
+    const filters = result.data;
+    const filteredPets = await PetsModel.getAll(filters);
     res.json(filteredPets);
   }
 
   static async getById(req, res) {
     const { id } = req.params;
     const pet = await PetsModel.getById({ id });
+    if (pet === undefined) {
+      return res.status(404).json({ message: "Pet don't found" });
+    }
+    res.json(pet);
+  }
+
+  static async getByUserId(req, res) {
+    const { userId } = req.params;
+    const pet = await PetsModel.getByUserId({ userId });
     if (pet === undefined) {
       return res.status(404).json({ message: "Pet don't found" });
     }
