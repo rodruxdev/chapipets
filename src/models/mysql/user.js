@@ -5,8 +5,8 @@ import { PetsModel } from "./pet.js";
 export class UsersModel {
   static async getAll(filters) {
     let query =
-      "SELECT (BIN_TO_UUID(id_user)), name, description, email, cellphone, role FROM user WHERE ";
-    const conditions = ["sate = ?"];
+      "SELECT (BIN_TO_UUID(id_user)) as userId, name, description, email, cellphone, role FROM user WHERE ";
+    const conditions = ["state = ?"];
     const values = ["enabled"];
     if (filters) {
       if (filters.name) {
@@ -41,8 +41,22 @@ export class UsersModel {
   static async getById({ userId }) {
     try {
       const [user] = await pool.query(
-        `SELECT (BIN_TO_UUID(id_user)), name, description, email, cellphone, role FROM user WHERE id_user = (UUID_TO_BIN(?)) AND state = "enabled";`,
+        `SELECT (BIN_TO_UUID(id_user)) as userId, name, description, email, cellphone, role FROM user WHERE id_user = (UUID_TO_BIN(?)) AND state = "enabled";`,
         [userId]
+      );
+      if (user.length === 0) return null;
+      return user[0];
+    } catch (error) {
+      const errorMessage = error.message ?? error;
+      throw new Error(`Error obtaining user with id: ${errorMessage}`);
+    }
+  }
+
+  static async getByEmail({ email }) {
+    try {
+      const [user] = await pool.query(
+        `SELECT (BIN_TO_UUID(id_user)) as userId, name, description, email, cellphone, role FROM user WHERE email = ? AND state = "enabled";`,
+        [email]
       );
       if (user.length === 0) return null;
       return user[0];
