@@ -1,4 +1,6 @@
 import { pool } from "../../services/mysqlPool.js";
+import bcrypt from "bcryptjs";
+import { PetsModel } from "./pet.js";
 
 export class UsersModel {
   static async getAll(filters) {
@@ -51,15 +53,15 @@ export class UsersModel {
   }
 
   static async create({ input }) {
-    const { name, description, email, cellphone, password } = input;
-    // To Do: Hash the password
+    const { name, description, email, cellphone, password, role } = input;
+    const hashedPassword = await bcrypt.hash(password, 8);
     try {
       const [uuidResult] = await connection.query("SELECT UUID() uuid;");
       const [{ userId }] = uuidResult;
       const userResult = await pool.query(
-        `INSERT INTO user (id_user, name, description, email, cellphone, password)
+        `INSERT INTO user (id_user, name, description, email, cellphone, password, role)
       VALUES ((UUID_TO_BIN("${userId}")), ?, ?, ?, ?, ?);`,
-        [name, description, email, cellphone, password]
+        [name, description, email, cellphone, hashedPassword, role]
       );
       return userResult[0];
     } catch (error) {
@@ -117,7 +119,7 @@ export class UsersModel {
         'UPDATE user SET state = "disabled" WHERE id_user = (UUID_TO_BIN(?)) AND state = "enabled";',
         [id]
       );
-      // To Do: Delete all the asociated pets.
+      await PetsModel.deleteByUserId({ id });
       if (result[0].affectedRows === 0) {
         return false;
       }

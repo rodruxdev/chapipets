@@ -1,4 +1,5 @@
 import { pool } from "../../services/mysqlPool.js";
+import { UsersModel } from "./user.js";
 
 export class PetsModel {
   static async getAll(filters) {
@@ -94,7 +95,10 @@ export class PetsModel {
     const state = "enabled";
 
     try {
-      // To Do: Verify that the user exists.
+      const user = await UsersModel.getById({ userId });
+      if (user === null) {
+        throw new Error(`Error: User doesn't exist or was deleted`);
+      }
       const petResult = await pool.query(
         `INSERT INTO pet (type, name, description, breed, age, size, color, image, petState, state, userId)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (UUID_TO_BIN(?)));`,
