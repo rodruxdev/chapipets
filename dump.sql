@@ -47,6 +47,6 @@ INSERT INTO pet (TYPE, NAME, DESCRIPTION, BREED, AGE, SIZE, COLOR, IMAGE, PET_ST
 VALUES
 ('dog', 'Buddy', 'Friendly dog', 'Labrador', 'pediatric', 'Medium', 'Brown', 'dog.jpg', 'available', 'enabled', @user_id),
 ('cat', 'Whiskers', 'Playful cat', 'Siamese', 'young adult', 'Small', 'White', 'cat.jpg', 'adopted', 'disabled', @user_id),
-('fish', 'Nemo', 'Colorful fish', 'Clownfish', '1', 'mature adult', 'Orange', 'fish.jpg', 'available', 'enabled', @user_id),
-('bird', 'Tweetie', 'Chirpy bird', 'Canary', '1', 'senior', 'Yellow', 'bird.jpg', 'available', 'enabled', @user_id),
-('rabbit', 'Fluffy', 'Cute rabbit', 'Lop', '2', 'geriatric', 'Gray', 'rabbit.jpg', 'available', 'enabled', @user_id);
+('fish', 'Nemo', 'Colorful fish', 'Clownfish', 'mature adult', 'Small', 'Orange', 'fish.jpg', 'available', 'enabled', @user_id),
+('bird', 'Tweetie', 'Chirpy bird', 'Canary', 'senior', 'Medium', 'Yellow', 'bird.jpg', 'available', 'enabled', @user_id),
+('rabbit', 'Fluffy', 'Cute rabbit', 'Lop', 'geriatric', 'Big', 'Gray', 'rabbit.jpg', 'available', 'enabled', @user_id);

@@ -20,11 +20,10 @@ const userSchema = z.object({
     .email({
       message: "Invalid email address",
     }),
-  cellphone: z
-    .string({
-      invalid_type_error: "Cellphone must be a string",
-    })
-    .regex("", { message: "Invalid cellphone number" }),
+  cellphone: z.string({
+    invalid_type_error: "Cellphone must be a string",
+  }),
+  // .regex("", { message: "Invalid cellphone number" }),
   password: z.string({
     required_error: "Password is required",
   }),

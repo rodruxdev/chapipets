@@ -70,14 +70,19 @@ export class UsersModel {
     const { name, description, email, cellphone, password, role } = input;
     const hashedPassword = await bcrypt.hash(password, 8);
     try {
-      const [uuidResult] = await connection.query("SELECT UUID() uuid;");
+      const [uuidResult] = await pool.query("SELECT UUID() userId;");
       const [{ userId }] = uuidResult;
-      const userResult = await pool.query(
+      const result = await pool.query(
         `INSERT INTO user (id_user, name, description, email, cellphone, password, role)
-      VALUES ((UUID_TO_BIN("${userId}")), ?, ?, ?, ?, ?);`,
+      VALUES ((UUID_TO_BIN("${userId}")), ?, ?, ?, ?, ?, ?);`,
         [name, description, email, cellphone, hashedPassword, role]
       );
-      return userResult[0];
+      const { affectedRows } = result[0];
+      if (affectedRows === 1) {
+        const newUser = await this.getById({ userId });
+        return newUser;
+      }
+      return null;
     } catch (error) {
       const errorMessage = error.message ?? error;
       throw new Error(`Error creating user: ${errorMessage}`);
@@ -105,10 +110,6 @@ export class UsersModel {
         conditions.push("cellphone = ?");
         values.push(input.cellphone);
       }
-      if (input.password) {
-        conditions.push("password = ?");
-        values.push(input.password);
-      }
       if (input.role) {
         conditions.push("role = ?");
         values.push(input.role);
@@ -120,27 +121,30 @@ export class UsersModel {
 
     try {
       const result = await pool.query(query, values);
-      return result[0];
+      const user = await this.getById({ userId: id });
+      return user;
     } catch (error) {
       const errorMessage = error.message ?? error;
       throw new Error(`Error updating pet: ${errorMessage}`);
     }
   }
 
-  static async delete({ id }) {
+  // To Do: Update password
+
+  static async delete({ userId }) {
     try {
       const result = await pool.query(
         'UPDATE user SET state = "disabled" WHERE id_user = (UUID_TO_BIN(?)) AND state = "enabled";',
-        [id]
+        [userId]
       );
-      await PetsModel.deleteByUserId({ id });
+      await PetsModel.deleteByUserId({ userId });
       if (result[0].affectedRows === 0) {
         return false;
       }
       return true;
     } catch (error) {
       const errorMessage = error.message ?? error;
-      throw new Error(`Error deleting pet: ${errorMessage}`);
+      throw new Error(`Error deleting user: ${errorMessage}`);
     }
   }
 }

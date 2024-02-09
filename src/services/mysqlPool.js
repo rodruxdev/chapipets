@@ -1,12 +1,15 @@
 import mysql2 from "mysql2";
+import { configValues } from "../config.js";
 
 const poolCreator = mysql2.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  password: process.env.DB_USER_PASSWORD,
+  host: configValues.host,
+  user: configValues.user,
+  database: configValues.database,
+  password: configValues.password,
   waitForConnections: true,
   connectionLimit: 10,
+  maxIdle: 10,
+  idleTimeout: 60000,
   queueLimit: 0,
 });
 

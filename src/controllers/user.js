@@ -14,7 +14,7 @@ export class UsersController {
 
   static async getById(req, res) {
     const { id } = req.params;
-    const user = await UsersModel.getById({ id });
+    const user = await UsersModel.getById({ userId: id });
     if (user === undefined) {
       return res.status(404).json({ message: "User don't found" });
     }
@@ -35,7 +35,7 @@ export class UsersController {
     if (result.error) {
       return res.status(400).json({ error: JSON.parse(result.error.message) });
     }
-    const id = Number(req.params.id);
+    const { id } = req.params;
     const updatedUser = await UsersModel.update({ id, input: result.data });
     if (updatedUser === undefined) {
       return res.status(404).json({ message: "User don't found" });
@@ -44,8 +44,8 @@ export class UsersController {
   }
 
   static async delete(req, res) {
-    const id = Number(req.params.id);
-    const deleteUserResult = await UsersModel.delete({ id });
+    const { id } = req.params;
+    const deleteUserResult = await UsersModel.delete({ userId: id });
     if (!deleteUserResult) {
       return res.status(404).json({ message: "User don't found" });
     }
