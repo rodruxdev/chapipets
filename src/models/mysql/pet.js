@@ -4,7 +4,7 @@ import { UsersModel } from "./user.js";
 export class PetsModel {
   static async getAll(filters) {
     let query =
-      "SELECT id_pet, type, name, description, breed, age, size, color, image, pet_state, id_user FROM pet WHERE ";
+      "SELECT id_pet as petId, type, name, description, breed, age, size, color, image, pet_state, (BIN_TO_UUID(id_user)) as userId FROM pet WHERE ";
     const conditions = ["state = ?"];
     const values = ["enabled"];
     if (filters) {
@@ -17,16 +17,20 @@ export class PetsModel {
         values.push(`${filters.name}%`);
       }
       if (filters.breed) {
-        conditions.push("breed = ?");
-        values.push(filters.breed);
+        conditions.push("LOWER(breed) = ?");
+        values.push(filters.breed.toLowerCase());
+      }
+      if (filters.size) {
+        conditions.push("LOWER(size) = ?");
+        values.push(filters.size.toLowerCase());
       }
       if (filters.age) {
         conditions.push("age = ?");
-        values.push(filters.age);
+        values.push(filters.age.toLowerCase());
       }
       if (filters.color) {
-        conditions.push("color = ?");
-        values.push(filters.color);
+        conditions.push("LOWER(color) = ?");
+        values.push(filters.color.toLowerCase());
       }
       if (filters.petState) {
         conditions.push("pet_state = ?");
@@ -52,11 +56,11 @@ export class PetsModel {
   static async getByUserId({ userId }) {
     try {
       const [pets] = await pool.query(
-        `SELECT id_pet, type, name, description, breed, age, size, color, image, pet_state, id_user
+        `SELECT id_pet as petId, type, name, description, breed, age, size, color, image, pet_state, (BIN_TO_UUID(id_user)) as userId
         FROM pet WHERE id_user = (UUID_TO_BIN(?)) AND state = "enabled";`,
         [userId]
       );
-      if (pet.length === 0) return null;
+      if (pets.length === 0) return null;
       return pets;
     } catch (error) {
       const errorMessage = error.message ?? error;
@@ -67,7 +71,7 @@ export class PetsModel {
   static async getById({ id }) {
     try {
       const [pet] = await pool.query(
-        `SELECT id_pet, type, name, description, breed, age, size, color, image, pet_state, id_user
+        `SELECT id_pet as petId, type, name, description, breed, age, size, color, image, pet_state, (BIN_TO_UUID(id_user)) as userId
         FROM pet WHERE id_pet = ? AND state = "enabled";`,
         [id]
       );
@@ -100,7 +104,7 @@ export class PetsModel {
         throw new Error(`Error: User doesn't exist or was deleted`);
       }
       const petResult = await pool.query(
-        `INSERT INTO pet (type, name, description, breed, age, size, color, image, petState, state, userId)
+        `INSERT INTO pet (type, name, description, breed, age, size, color, image, pet_state, state, id_user)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (UUID_TO_BIN(?)));`,
         [
           type,
@@ -116,7 +120,12 @@ export class PetsModel {
           userId,
         ]
       );
-      return petResult[0];
+      const { affectedRows, insertId } = petResult[0];
+      if (affectedRows === 1) {
+        const newPet = await this.getById({ id: insertId });
+        return newPet;
+      }
+      return null;
     } catch (error) {
       const errorMessage = error.message ?? error;
       throw new Error(`Error creating pet: ${errorMessage}`);
@@ -144,6 +153,10 @@ export class PetsModel {
         conditions.push("breed = ?");
         values.push(input.breed);
       }
+      if (input.size) {
+        conditions.push("size = ?");
+        values.push(input.size);
+      }
       if (input.age) {
         conditions.push("age = ?");
         values.push(input.age);
@@ -160,17 +173,17 @@ export class PetsModel {
         conditions.push("pet_state = ?");
         values.push(input.petState);
       }
-    }
-    query += conditions.join(", ");
-    query += ' WHERE id_pet = ? AND state = "enabled";';
-    values.push(id);
-
-    try {
-      const result = await pool.query(query, values);
-      return result[0];
-    } catch (error) {
-      const errorMessage = error.message ?? error;
-      throw new Error(`Error updating pet: ${errorMessage}`);
+      query += conditions.join(", ");
+      query += ' WHERE id_pet = ? AND state = "enabled";';
+      values.push(id);
+      try {
+        const result = await pool.query(query, values);
+        const pet = await this.getById({ id: id });
+        return pet;
+      } catch (error) {
+        const errorMessage = error.message ?? error;
+        throw new Error(`Error updating pet: ${errorMessage}`);
+      }
     }
   }
 
@@ -193,7 +206,7 @@ export class PetsModel {
   static async deleteByUserId({ userId }) {
     try {
       const result = await pool.query(
-        'UPDATE pet SET state = "disabled" WHERE id_user = (UUID_TO_BIN(?)) AND state = "enabled";',
+        'UPDATE pet SET state = "disabled" WHERE id_user=(UUID_TO_BIN(?)) AND state="enabled";',
         [userId]
       );
       if (result[0].affectedRows === 0) {

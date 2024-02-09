@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { UsersController } from "../controllers/user";
+import { UsersController } from "../controllers/user.js";
 
-export const userRouter = Router();
+export const usersRouter = Router();
 
-userRouter.get("/", UsersController.getAll);
-userRouter.post("/", UsersController.create);
+usersRouter.get("/", UsersController.getAll);
+usersRouter.post("/", UsersController.create);
 
-userRouter.get("/:id", UsersController.getById);
-userRouter.patch("/:id", UsersController.update);
-userRouter.delete("/:id", UsersController.delete);
+usersRouter.get("/:id", UsersController.getById);
+usersRouter.patch("/:id", UsersController.update);
+usersRouter.delete("/:id", UsersController.delete);
