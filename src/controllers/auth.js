@@ -1,13 +1,14 @@
 import jwt from "jsonwebtoken";
+import { configValues } from "../config.js";
 
 export class AuthController {
   static login(req, res) {
-    const user = req.user;
+    const { user } = req;
     const payload = {
-      sub: user.IdUser,
+      sub: user.userId,
       role: user.role,
     };
-    const token = jwt.sign(payload, "secret");
+    const token = jwt.sign(payload, configValues.secret);
     res.json({ user, token });
   }
 }

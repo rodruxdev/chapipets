@@ -7,9 +7,9 @@ export const localStrategy = new Strategy(
     usernameField: "email",
     passwordField: "password",
   },
-  async () => {
+  async (email, password, done) => {
     try {
-      const user = await UsersModel.getByEmail(email);
+      const user = await UsersModel.getByEmail({ email, withPassword: true });
       if (!user) {
         // done(boom.unauthorized(), false);
         throw new Error("Error");

@@ -52,10 +52,11 @@ export class UsersModel {
     }
   }
 
-  static async getByEmail({ email }) {
+  static async getByEmail({ email, withPassword = false }) {
     try {
+      const queryPassword = withPassword ? ", password" : "";
       const [user] = await pool.query(
-        `SELECT (BIN_TO_UUID(id_user)) as userId, name, description, email, cellphone, role FROM user WHERE email = ? AND state = "enabled";`,
+        `SELECT (BIN_TO_UUID(id_user)) as userId, name, description, email, cellphone, role${queryPassword} FROM user WHERE email = ? AND state = "enabled";`,
         [email]
       );
       if (user.length === 0) return null;

@@ -76,3 +76,14 @@ Content-Type: application/json
 
 ###  Delete one user
 DELETE http://localhost:3005/users/86648a5c-c6ca-11ee-8571-0242ac130002
+
+# Auth endpoints
+
+### Login
+POST http://localhost:3005/auth/login
+Content-Type: application/json
+
+{
+  "email": "adoption@pet.com",
+  "password": "pet123"
+}
