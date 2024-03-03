@@ -5,6 +5,7 @@ import { authRouter } from "./routes/auth.js";
 import { usersRouter } from "./routes/users.js";
 import passport from "passport";
 import { localStrategy } from "./utils/auth/localStrategy.js";
+import { JwtStrategy } from "./utils/auth/jwtStrategy.js";
 import {
   boomHandler,
   errorHandler,
@@ -14,6 +15,7 @@ import {
 const app = express();
 
 passport.use(localStrategy);
+passport.use(JwtStrategy);
 app.use(json());
 app.use(corsMiddleware());
 app.disable("x-powered-by");

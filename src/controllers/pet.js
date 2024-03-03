@@ -46,6 +46,17 @@ export class PetsController {
       throw Boom.badRequest(result.error.message);
     }
     const id = Number(req.params.id);
+    const { userId } = await PetsModel.getUserIdByPetId({ id });
+    const { sub, role } = req.user;
+    if (sub === undefined || role === undefined) {
+      throw Boom.badRequest("No user info");
+    }
+    if (userId === undefined) {
+      throw new Error("Pet without user");
+    }
+    if (sub === userId || role === "admin") {
+      throw Boom.unauthorized();
+    }
     const updatedPet = await PetsModel.update({ id, input: result.data });
     if (updatedPet === undefined) {
       throw Boom.notFound("Pets don't found for user");
@@ -55,6 +66,17 @@ export class PetsController {
 
   static async delete(req, res) {
     const id = Number(req.params.id);
+    const { userId } = await PetsModel.getUserIdByPetId({ id });
+    const { sub, role } = req.user;
+    if (sub === undefined || role === undefined) {
+      throw Boom.badRequest("No user info");
+    }
+    if (userId === undefined) {
+      throw new Error("Pet without user");
+    }
+    if (sub === userId || role === "admin") {
+      throw Boom.unauthorized();
+    }
     const deletePetResult = await PetsModel.delete({ id });
     if (!deletePetResult) {
       throw Boom.notFound("Pets don't found for user");

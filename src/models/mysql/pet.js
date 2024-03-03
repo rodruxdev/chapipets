@@ -83,6 +83,21 @@ export class PetsModel {
     }
   }
 
+  static async getUserIdByPetId({ id }) {
+    try {
+      const [pet] = await pool.query(
+        `SELECT id_pet as petId,(BIN_TO_UUID(id_user)) as userId
+        FROM pet WHERE id_pet = ? AND state = "enabled";`,
+        [id]
+      );
+      if (pet.length === 0) return null;
+      return pet[0];
+    } catch (error) {
+      const errorMessage = error.message ?? error;
+      throw new Error(`Error obtaining pet with id: ${errorMessage}`);
+    }
+  }
+
   static async create({ input }) {
     const {
       type,
