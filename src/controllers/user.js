@@ -1,3 +1,4 @@
+import { Boom } from "@hapi/boom";
 import { UsersModel } from "../models/mysql/user.js";
 import { validatePartialUser, validateUser } from "../schemas/users.js";
 
@@ -36,6 +37,13 @@ export class UsersController {
       throw Boom.badRequest(result.error.message);
     }
     const { id } = req.params;
+    const { sub, role } = req.user;
+    if (sub === undefined || role === undefined) {
+      throw Boom.badRequest("No user info");
+    }
+    if (sub === id || role === "admin") {
+      throw Boom.unauthorized();
+    }
     const updatedUser = await UsersModel.update({ id, input: result.data });
     if (updatedUser === undefined) {
       throw Boom.notFound("User don't found");
@@ -45,6 +53,13 @@ export class UsersController {
 
   static async delete(req, res) {
     const { id } = req.params;
+    const { sub, role } = req.user;
+    if (sub === undefined || role === undefined) {
+      throw Boom.badRequest("No user info");
+    }
+    if (sub === id || role === "admin") {
+      throw Boom.unauthorized();
+    }
     const deleteUserResult = await UsersModel.delete({ userId: id });
     if (!deleteUserResult) {
       throw Boom.notFound("User don't found");
